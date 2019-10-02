@@ -8,15 +8,16 @@
     <p class="lead">
         @using (Html.BeginForm("CargaCifradoZZ", "ZigZag", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
-            <p>Clave:</p>
-            <input type="text" name="Clave" />
+        <p>Clave:</p>
+        <input type="text" name="Clave" />
 
-            <input type="file" name="ACifrarZZ" />
-            <hr />
+        <hr />
 
-            <p>Archivo a cifrar:</p>
-            <input type="submit" value="Subir" class="btn btn-outline-success" />
-        }
-     <h6>@ViewBag.Msg</h6>
-</div>
+        <p>Archivo a cifrar:</p>
+
+        <input type="file" name="ACifrarZZ" />
+        <input type="submit" value="Subir" class="btn btn-outline-success" />
+    }
+        <h6>@ViewBag.Msg</h6>
+    </div>
 
