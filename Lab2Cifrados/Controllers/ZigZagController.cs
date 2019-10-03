@@ -29,7 +29,7 @@ namespace Lab2Cifrados.Controllers
                 var Niveles = Convert.ToInt32(Clave);
                 var Name = NombreArchivo.Split('.');
                 var RutaLectura = Server.MapPath($"~/Cargados/{NombreArchivo}");
-                var RutaEscritura = Server.MapPath($"~/CifradoZZ/{Name[0]}.cif");
+                var RutaEscritura = Server.MapPath($"~/Cifrados/{Name[0]}.cif");
                 ACifrarZZ.SaveAs(RutaLectura);
 
                 const int TBuffer = 1024;
@@ -132,6 +132,37 @@ namespace Lab2Cifrados.Controllers
                 }
             }
 
+            return View();
+        }
+
+        public ActionResult CargaDescifradoZZ()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult CargaDescifradoZZ(HttpPostedFileBase ADescifrarZZ, string Clave)
+        {
+            if (ADescifrarZZ != null)
+            {
+                var NombreArchivo = ADescifrarZZ.FileName;
+                var Niveles = Convert.ToInt32(Clave);
+                var Name = NombreArchivo.Split('.');
+                var RutaLectura = Server.MapPath($"~/Cargados/{NombreArchivo}");
+                var RutaEscritura = Server.MapPath($"~/Descifrados/{Name[0]}.cif");
+                ADescifrarZZ.SaveAs(RutaLectura);
+
+                const int TBuffer = 1024;
+                var CLineas = Convert.ToInt32(Clave);
+                var ArregloEscritor = new string[CLineas];
+
+                using (var stream = new FileStream(RutaLectura, FileMode.Open))
+                {
+                    using (var Lector = new BinaryReader(stream))
+                    {
+                    }
+                }
+            }
             return View();
         }
     }
