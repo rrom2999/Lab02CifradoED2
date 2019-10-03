@@ -34,58 +34,98 @@ namespace Lab2Cifrados.Controllers
 
                 const int TBuffer = 1024;
                 var LineaVector = 0;
-                var CLineas = Convert.ToInt32(Clave)-1;
+                var CLineas = Convert.ToInt32(Clave);
                 var ArregloEscritor = new string[CLineas];
                 var Sentido = 0;
+                var TopeSup = true;
 
                 using (var stream = new FileStream(RutaLectura, FileMode.Open))
                 {
                     using (var Lector = new BinaryReader(stream))
                     {
+                        var BytesBuffer = new byte[TBuffer];
+                        while (Lector.BaseStream.Position != Lector.BaseStream.Length)
+                        {
+                            BytesBuffer = Lector.ReadBytes(TBuffer);
+                            for (int i = 0; i < BytesBuffer.Length; i++)
+                            {
+                                if (Sentido == 0) //Hacia abajo
+                                {
+                                    if (LineaVector == CLineas - 1) // Llego hasta abajo
+                                    {
+                                        Sentido = 1;
+                                        ArregloEscritor[LineaVector] = $"{ArregloEscritor[LineaVector]}{Convert.ToString(Convert.ToChar(BytesBuffer[i]))}";
+                                        LineaVector--;
+                                    }
+                                    else
+                                    {
+                                        Sentido = 0;
+                                        TopeSup = false;
+                                        ArregloEscritor[LineaVector] = $"{ArregloEscritor[LineaVector]}{Convert.ToString(Convert.ToChar(BytesBuffer[i]))}";
+                                        LineaVector++;
+                                    }
+                                }
+                                else       //Hacia arriba
+                                {
+                                    if (LineaVector == 0) // Llego hasta arriba
+                                    {
+                                        Sentido = 0;
+                                        TopeSup = true;
+                                        ArregloEscritor[LineaVector] = $"{ArregloEscritor[LineaVector]}{Convert.ToString(Convert.ToChar(BytesBuffer[i]))}";
+                                        LineaVector++;
+                                    }
+                                    else
+                                    {
+                                        Sentido = 1;
+                                        ArregloEscritor[LineaVector] = $"{ArregloEscritor[LineaVector]}{Convert.ToString(Convert.ToChar(BytesBuffer[i]))}";
+                                        LineaVector--;
+                                    }
+                                }
+                            }
+                        }
+
+                        //Relleno de espacios calculando valores que deberian ser
+
+                        if (!TopeSup)
+                        {
+                            if (Sentido != 0) //Se quedo escribiendo hacia arriba
+                            {
+                                while (LineaVector != 0)
+                                {
+                                    ArregloEscritor[LineaVector] = $"{ArregloEscritor[LineaVector]}~";
+                                    LineaVector--;
+                                }
+                                ArregloEscritor[LineaVector] = $"{ArregloEscritor[LineaVector]}~";
+                            }
+                            else               //Se quedo escribiendo hacia abajo
+                            {
+                                while (LineaVector < CLineas - 1)
+                                {
+                                    ArregloEscritor[LineaVector] = $"{ArregloEscritor[LineaVector]}~";
+                                    LineaVector++;
+                                }
+                                ArregloEscritor[LineaVector] = $"{ArregloEscritor[LineaVector]}~"; //Escribe el de hasta abajo
+                                LineaVector--;
+                                while (LineaVector != 0)
+                                {
+                                    ArregloEscritor[LineaVector] = $"{ArregloEscritor[LineaVector]}~";
+                                    LineaVector--;
+                                }
+                                ArregloEscritor[LineaVector] = $"{ArregloEscritor[LineaVector]}~";
+                            }
+                        }
+
                         using (var writeStream = new FileStream(RutaEscritura, FileMode.OpenOrCreate))
                         {
                             using (var Escritor = new BinaryWriter(writeStream))
                             {
-                                var BytesBuffer = new byte[TBuffer];
-                                while (Lector.BaseStream.Position != Lector.BaseStream.Length)
+                                foreach(var Franja in ArregloEscritor)
                                 {
-                                    BytesBuffer = Lector.ReadBytes(TBuffer);
-                                    for (int i = 0; i < BytesBuffer.Length; i++)
+                                    foreach(var Caracter in Franja)
                                     {
-                                        if (Sentido == 0) //Hacia abajo
-                                        {
-                                            if (LineaVector == CLineas) // Llego hasta abajo
-                                            {
-                                                Sentido = 1;
-                                                ArregloEscritor[LineaVector] = ArregloEscritor[LineaVector] + Convert.ToString(BytesBuffer[i]);
-                                                LineaVector--;
-                                            }
-                                            else
-                                            {
-                                                Sentido = 0;
-                                                ArregloEscritor[LineaVector] = ArregloEscritor[LineaVector] + Convert.ToString(BytesBuffer[i]);
-                                                LineaVector++;
-                                            }
-                                        }
-                                        else       //Hacia arriba
-                                        {
-                                            if (LineaVector == 0) // Llego hasta arriba
-                                            {
-                                                Sentido = 0;
-                                                ArregloEscritor[LineaVector] = ArregloEscritor[LineaVector] + Convert.ToString(BytesBuffer[i]);
-                                                LineaVector++;
-                                            }
-                                            else
-                                            {
-                                                Sentido = 1;
-                                                ArregloEscritor[LineaVector] = ArregloEscritor[LineaVector] + Convert.ToString(BytesBuffer[i]);
-                                                LineaVector--;
-                                            }
-                                        }
+                                        Escritor.Write(Convert.ToByte(Convert.ToInt32(Convert.ToChar(Caracter))));
                                     }
-                                    
                                 }
-
                             }
                         }
                     }
@@ -94,6 +134,5 @@ namespace Lab2Cifrados.Controllers
 
             return View();
         }
-
     }
 }
