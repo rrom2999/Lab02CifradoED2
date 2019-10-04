@@ -133,6 +133,10 @@ namespace Lab2Cifrados.Controllers
                     }
                 }
             }
+            else
+            {
+                ViewBag.Msg = "No se seleccionó nigún archivo";
+            }
 
             return View();
         }
@@ -242,6 +246,10 @@ namespace Lab2Cifrados.Controllers
                         Escritor.Write(Convert.ToByte(Convert.ToInt32(Convert.ToChar(ArregloEscritor[0][IndiceExtremo]))));
                     }
                 }
+            }
+            else
+            {
+                ViewBag.Msg = "No se seleccionó nigún archivo";
             }
             return View();
         }
