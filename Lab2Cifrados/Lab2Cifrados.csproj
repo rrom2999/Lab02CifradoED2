@@ -199,6 +199,7 @@
     <Content Include="Views\ZigZag\CargaDescifradoZZ.cshtml" />
     <Content Include="Views\Cesar\Index.cshtml" />
     <Content Include="Views\Cesar\CargaCifradoC.cshtml" />
+    <Content Include="Views\Cesar\CargaDescifradoC.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
