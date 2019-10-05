@@ -133,12 +133,8 @@ namespace Lab2Cifrados.Controllers
                     }
                 }
             }
-            else
-            {
-                ViewBag.Msg = "No se seleccionó nigún archivo";
-            }
 
-            return View();
+            return RedirectToAction("Index", "Home");
         }
 
         public ActionResult CargaDescifradoZZ()
@@ -159,7 +155,7 @@ namespace Lab2Cifrados.Controllers
                 ADescifrarZZ.SaveAs(RutaLectura);
                 List<string> Guia = new List<string>();
 
-                const int TBuffer = 1024;
+                
                 var CBytes = ADescifrarZZ.ContentLength;
                 var CLineas = Convert.ToInt32(Clave);
                 var M = (CBytes - 3 + (2 * CLineas)) / ((2 * CLineas) - 2);
@@ -247,11 +243,7 @@ namespace Lab2Cifrados.Controllers
                     }
                 }
             }
-            else
-            {
-                ViewBag.Msg = "No se seleccionó nigún archivo";
-            }
-            return View();
+            return RedirectToAction("Index", "Home");
         }
     }
 }

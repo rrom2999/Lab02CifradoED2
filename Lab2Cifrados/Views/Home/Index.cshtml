@@ -4,7 +4,6 @@
 
 <div class="jumbotron">
     <h1>Metodos</h1>
-
     <table class="table table-bordered table-responsive table-hover">
         <tr class="table-hover">
             <td>
@@ -13,7 +12,26 @@
             <td>
                 @Html.ActionLink("Cesar", "LlamadoCesar")
             </td>
+            <td>
+                @Html.ActionLink("Espiral", "LlamadoEspiral")
+            </td>
         </tr>
+    </table>
+
+    <table class="table">
+        <tr>
+            <th>
+                Archivos
+            </th>
+        </tr>
+        @foreach (var item in ViewData.Model)
+        {
+        <tr>
+            <td>
+                @Html.ActionLink((string)item, "Descargables", new { fileName = item })
+            </td>
+        </tr>
+        }
     </table>
 </div>
 
