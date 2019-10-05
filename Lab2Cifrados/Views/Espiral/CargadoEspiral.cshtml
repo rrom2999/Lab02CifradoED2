@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewBag.Title = "CargadoEspiral";
+}
+
+<h2>CargadoEspiral</h2>
+
+<div class="jumbotron">
+    <p class="lead">
+        @using (Html.BeginForm("CargadoEspiral", "Espiral", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+        <p>Clave:</p>
+        <input type="text" name="Clave" />
+
+        <p>Direccion:</p>
+        <p> 1. Horario</p>
+        <p> 2. Anti horario</p>
+        <input type="text" name="Direccion" />
+        <hr />
+
+        <p>Archivo a cifrar:</p>
+
+        <input type="file" name="ACifrarEs" />
+        <input type="submit" value="Subir" class="btn btn-outline-success" />
+    }
+        <h6>@ViewBag.Msg</h6>
+    </div>

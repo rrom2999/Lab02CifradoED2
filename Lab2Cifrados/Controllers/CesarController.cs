@@ -101,17 +101,8 @@ namespace Lab2Cifrados.Controllers
                         }
                     }
                 }
-                else
-                {
-                    ViewBag.Msg = "Clave invalida, no debe tener caracteres repetidos";
-                }
             }
-            else
-            {
-
-                ViewBag.Msg = "No seleccionó ningún archivo";
-            }
-            return View();
+            return RedirectToAction("Index", "Home");
         }
 
         public ActionResult CargaDescifradoC()
@@ -200,18 +191,9 @@ namespace Lab2Cifrados.Controllers
                         }
                     }
                 }
-                else
-                {
-                    ViewBag.Msg = "Clave invalida, no debe tener caracteres repetidos";
-                }
-            }
-            else
-            {
-
-                ViewBag.Msg = "No seleccionó ningún archivo";
             }
 
-            return View();
+            return RedirectToAction("Index", "Home");
         }
     }
 }
