@@ -218,6 +218,7 @@
     <Content Include="Views\Espiral\CargaDescifradoEspiral.cshtml" />
     <Content Include="Views\Espiral\Index.cshtml" />
     <Content Include="Views\SDES\Index.cshtml" />
+    <Content Include="Views\SDES\CargaParaCifrar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

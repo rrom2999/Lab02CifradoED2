@@ -65,5 +65,65 @@ namespace Lab2Cifrados.Models
 
             return Nuevo;
         }
+
+        public void ObtenerKas(string Llave)
+        {
+            var ParteA = "";
+            var ParteB = "";
+
+            var Binario = P10(Llave);
+            for (int a = 0; a < 5; a++)
+            {
+                ParteA = $"{ParteA}{Binario[a]}";
+            }
+
+            for (int b = 5; b < 10; b++)
+            {
+                ParteB = $"{ParteB}{Binario[b]}";
+            }
+            var ShifteadoUno = "";
+            var Temporal = "";
+            for (int a = 1; a < 5; a++)
+            {
+                Temporal = $"{Temporal}{ParteA[a]}";
+            }
+            ShifteadoUno = $"{Temporal}{ParteA[0]}"; //Primeros 5 con LS1
+            Temporal = "";
+            for (int b = 1; b < 5; b++)
+            {
+                Temporal = $"{Temporal}{ParteB[b]}";
+            }
+            ShifteadoUno = $"{ShifteadoUno}{Temporal}{ParteB[0]}";
+            K1 = P8(ShifteadoUno);
+
+            //Volver a hacer para K2 sobre ShifteadoUno
+            ParteA = "";
+            ParteB = "";
+
+            for (int a = 0; a < 5; a++)
+            {
+                ParteA = $"{ParteA}{ShifteadoUno[a]}";
+            }
+
+            for (int b = 5; b < 10; b++)
+            {
+                ParteB = $"{ParteB}{ShifteadoUno[b]}";
+            }
+
+            var ShifteadoDos = "";
+            Temporal = "";
+            for (int a = 2; a < 5; a++)
+            {
+                Temporal = $"{Temporal}{ParteA[a]}";
+            }
+            ShifteadoDos = $"{Temporal}{ParteA[0]}{ParteA[1]}"; //Primeros 5 con LS2 
+            Temporal = "";
+            for (int b = 2; b < 5; b++)
+            {
+                Temporal = $"{Temporal}{ParteB[b]}";
+            }
+            ShifteadoDos = $"{ShifteadoDos}{Temporal}{ParteB[0]}{ParteB[1]}";
+            K2 = P8(ShifteadoDos);
+        }
     }
 }
