@@ -160,6 +160,7 @@
     <Compile Include="Controllers\CesarController.cs" />
     <Compile Include="Controllers\EspiralController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\SDESController.cs" />
     <Compile Include="Controllers\ZigZagController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -215,6 +216,7 @@
     <Content Include="Views\Espiral\CargadoEspiral.cshtml" />
     <Content Include="Views\Espiral\CargaDescifradoEspiral.cshtml" />
     <Content Include="Views\Espiral\Index.cshtml" />
+    <Content Include="Views\SDES\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

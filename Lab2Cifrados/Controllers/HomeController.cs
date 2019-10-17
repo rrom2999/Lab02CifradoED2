@@ -66,5 +66,10 @@ namespace Lab2Cifrados.Controllers
         {
             return RedirectToAction("Index", "Cesar");
         }
+
+        public ActionResult LlamadoSDES()
+        {
+            return RedirectToAction("Index", "SDES");
+        }
     }
 }
