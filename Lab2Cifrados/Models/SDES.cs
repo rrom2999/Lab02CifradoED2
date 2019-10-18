@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.IO;
 
 namespace Lab2Cifrados.Models
 {
@@ -11,10 +12,27 @@ namespace Lab2Cifrados.Models
         public string K2;
         public string[,] S0 = new string[4, 4];
         public string[,] S1 = new string[4, 4];
-
-        public string P10(string Binario)  //Cambiar a que lo lea en txt
+        
+        public string[] ObtenerPermutaciones(string Ruta)
         {
-            string Secuencia = "9743521806";
+            string[] permutaciones = new string[5];
+            var cadena = string.Empty;
+            using (var stream = new FileStream(Ruta, FileMode.Open))
+            {
+                using (var Lector = new StreamReader(stream))
+                {
+                    while (!Lector.EndOfStream)
+                    {
+                        cadena = Lector.ReadLine();
+                    }
+                }
+            }
+            permutaciones = cadena.Split('@');
+            return permutaciones;
+        }
+
+        public string P10(string Binario, string Secuencia)  
+        {
             string Nuevo = "";
             if (Binario.Length < 10) Binario.PadLeft(10, '0');
 
@@ -26,9 +44,8 @@ namespace Lab2Cifrados.Models
             return Nuevo;
         }
 
-        public string P8(string Binario)  //Cambiar a que lea en txt
+        public string P8(string Binario, string Secuencia)  
         {
-            var Secuencia = "37541028";
             var Nuevo = "";
 
             for (int i = 0; i < 8; i++)
@@ -40,9 +57,8 @@ namespace Lab2Cifrados.Models
             return Nuevo;
         }
 
-        public string P4(string Binario)  //Cambiar a que lea en txt
+        public string P4(string Binario, string Secuencia)  
         {
-            var Secuencia = "2310";
             var Nuevo = "";
 
             for (int i = 0; i < 4; i++)
@@ -54,9 +70,8 @@ namespace Lab2Cifrados.Models
             return Nuevo;
         }
 
-        public string EP(string Binario)  //Cambiar a que lea en txt
+        public string EP(string Binario, string Secuencia) 
         {
-            var Secuencia = "20133021";
             var Nuevo = "";
 
             for (int i = 0; i < 8; i++)
@@ -68,9 +83,8 @@ namespace Lab2Cifrados.Models
             return Nuevo;
         }
 
-        public string IP(string Binario, bool Inverso)
+        public string IP(string Binario, bool Inverso, string Secuencia)
         {
-            var Secuencia = "70615243";
             var Nuevo = "";
             if (!Inverso)
             {
@@ -116,9 +130,9 @@ namespace Lab2Cifrados.Models
             return ResultadoXOR;
         }
 
-        public void ObtenerKas(string Llave)
+        public void ObtenerKas(string Llave, string[] Secuencia)
         {
-            var Binario = P10(Llave);
+            var Binario = P10(Llave, Secuencia[0]);
             var ParteA = Binario.Substring(0,5);
             var ParteB = Binario.Substring(5,5);
             
@@ -135,7 +149,7 @@ namespace Lab2Cifrados.Models
                 Temporal = $"{Temporal}{ParteB[b]}";
             }
             ShifteadoUno = $"{ShifteadoUno}{Temporal}{ParteB[0]}";
-            K1 = P8(ShifteadoUno);
+            K1 = P8(ShifteadoUno, Secuencia[1]);
 
             //Volver a hacer para K2 sobre ShifteadoUno
             ParteA = ShifteadoUno.Substring(0,5);
@@ -154,7 +168,7 @@ namespace Lab2Cifrados.Models
                 Temporal = $"{Temporal}{ParteB[b]}";
             }
             ShifteadoDos = $"{ShifteadoDos}{Temporal}{ParteB[0]}{ParteB[1]}";
-            K2 = P8(ShifteadoDos);
+            K2 = P8(ShifteadoDos, Secuencia[1]);
         }
 
         public string ObtenerDeSBoxes(string Binario)
@@ -185,18 +199,18 @@ namespace Lab2Cifrados.Models
             return ResultadoSBoxes;
         }
 
-        public int CifrarByte(string ByteLeido)
+        public int CifrarByte(string ByteLeido, string[] Secuencia)
         {
-            var Binario = IP(ByteLeido, false); //Paso1
+            var Binario = IP(ByteLeido, false, Secuencia[4]); //Paso1
 
             var ParteA = Binario.Substring(0, 4);
             var ParteB = Binario.Substring(4, 4);
 
-            var NuevaParteB = EP(ParteB); //Paso2
+            var NuevaParteB = EP(ParteB, Secuencia[3]); //Paso2
             NuevaParteB = XOR(NuevaParteB, K1); //Paso3
             
             var ResultadoSBoxes1 = ObtenerDeSBoxes(NuevaParteB); //Paso4
-            ResultadoSBoxes1 = P4(ResultadoSBoxes1); //Paso5
+            ResultadoSBoxes1 = P4(ResultadoSBoxes1, Secuencia[2]); //Paso5
             var ParteC = XOR(ResultadoSBoxes1, ParteA); //Paso6
 
             var NuevoBinario = $"{ParteB}{ParteC}";//Paso7 y Paso8
@@ -204,16 +218,55 @@ namespace Lab2Cifrados.Models
             var ParteD = NuevoBinario.Substring(0, 4);
             var ParteE = NuevoBinario.Substring(4, 4);
 
-            var NuevaParteE = EP(ParteE); //Paso9
+            var NuevaParteE = EP(ParteE, Secuencia[3]); //Paso9
             NuevaParteE = XOR(NuevaParteE, K2); //Paso10
 
             var ResultadoSBoxes2 = ObtenerDeSBoxes(NuevaParteE); //Paso11
-            ResultadoSBoxes2 = P4(ResultadoSBoxes2); //Paso12
+            ResultadoSBoxes2 = P4(ResultadoSBoxes2, Secuencia[2]); //Paso12
             var ParteF = XOR(ResultadoSBoxes2, ParteD); //Paso13
 
             var Nuevo = $"{ParteF}{ParteE}"; //Paso14
-            Nuevo = IP(Nuevo, true); //Paso15
+            Nuevo = IP(Nuevo, true, Secuencia[4]); //Paso15
             char [] Arreglo = Nuevo.ToCharArray();
+            Array.Reverse(Arreglo);
+            var NuevoInt = 0;
+
+            for (int i = 0; i < Arreglo.Length; i++)
+            {
+                if (Arreglo[i] == '1') NuevoInt += (int)Math.Pow(2, i);
+            }
+            return NuevoInt;
+        }
+
+        public int DescifrarByte(string ByteLeido, string[] Secuencia)
+        {
+            var Binario = IP(ByteLeido, false, Secuencia[4]); //Paso1
+
+            var ParteA = Binario.Substring(0, 4);
+            var ParteB = Binario.Substring(4, 4);
+
+            var NuevaParteB = EP(ParteB, Secuencia[3]); //Paso2
+            NuevaParteB = XOR(NuevaParteB, K2); //Paso3
+
+            var ResultadoSBoxes1 = ObtenerDeSBoxes(NuevaParteB); //Paso4
+            ResultadoSBoxes1 = P4(ResultadoSBoxes1, Secuencia[2]); //Paso5
+            var ParteC = XOR(ResultadoSBoxes1, ParteA); //Paso6
+
+            var NuevoBinario = $"{ParteB}{ParteC}";//Paso7 y Paso8
+
+            var ParteD = NuevoBinario.Substring(0, 4);
+            var ParteE = NuevoBinario.Substring(4, 4);
+
+            var NuevaParteE = EP(ParteE, Secuencia[3]); //Paso9
+            NuevaParteE = XOR(NuevaParteE, K1); //Paso10
+
+            var ResultadoSBoxes2 = ObtenerDeSBoxes(NuevaParteE); //Paso11
+            ResultadoSBoxes2 = P4(ResultadoSBoxes2, Secuencia[2]); //Paso12
+            var ParteF = XOR(ResultadoSBoxes2, ParteD); //Paso13
+
+            var Nuevo = $"{ParteF}{ParteE}"; //Paso14
+            Nuevo = IP(Nuevo, true, Secuencia[4]); //Paso15
+            char[] Arreglo = Nuevo.ToCharArray();
             Array.Reverse(Arreglo);
             var NuevoInt = 0;
 

@@ -1,0 +1,16 @@
+﻿<h2>CARGA DE ARCHIVO A DESCIFRAR</h2>
+<div class="jumbotron">
+    <h4 class="display-3"> Cifre su archivo mediante SDES</h4>
+    <p class="lead">
+        @using (Html.BeginForm("CargaParaDescifrar", "SDES", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <label>Ingrese la clave:</label>
+            <input type="text" name="Clave" />
+
+        <p>Sube el archivo a descifrar:</p>
+        <input type="file" name="ADescifrar" />
+        <hr />
+        <input type="submit" value="Subir" class="btn btn-outline-success" />
+    }
+        <h6>@ViewBag.Msg</h6>
+    </div>
