@@ -75,12 +75,14 @@ namespace Lab2Cifrados.Controllers
                                                     ByteLeido = $"0{ByteLeido}";
                                                 }
                                                 var ByteCifrado = NSDES.CifrarByte(ByteLeido);
+                                                Escritor.Write(Convert.ToByte(ByteCifrado));
                                             }
                                         }
                                     }
                                 }
                             }
                         }
+                        ViewBag.Msg = "El archivo ha sido cifrado con exito";
                     }
                     else
                     {

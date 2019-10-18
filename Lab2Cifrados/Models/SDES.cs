@@ -118,19 +118,10 @@ namespace Lab2Cifrados.Models
 
         public void ObtenerKas(string Llave)
         {
-            var ParteA = "";
-            var ParteB = "";
-
             var Binario = P10(Llave);
-            for (int a = 0; a < 5; a++)
-            {
-                ParteA = $"{ParteA}{Binario[a]}";
-            }
-
-            for (int b = 5; b < 10; b++)
-            {
-                ParteB = $"{ParteB}{Binario[b]}";
-            }
+            var ParteA = Binario.Substring(0,5);
+            var ParteB = Binario.Substring(5,5);
+            
             var ShifteadoUno = "";
             var Temporal = "";
             for (int a = 1; a < 5; a++)
@@ -147,18 +138,8 @@ namespace Lab2Cifrados.Models
             K1 = P8(ShifteadoUno);
 
             //Volver a hacer para K2 sobre ShifteadoUno
-            ParteA = "";
-            ParteB = "";
-
-            for (int a = 0; a < 5; a++)
-            {
-                ParteA = $"{ParteA}{ShifteadoUno[a]}";
-            }
-
-            for (int b = 5; b < 10; b++)
-            {
-                ParteB = $"{ParteB}{ShifteadoUno[b]}";
-            }
+            ParteA = ShifteadoUno.Substring(0,5);
+            ParteB = ShifteadoUno.Substring(5,5);
 
             var ShifteadoDos = "";
             Temporal = "";
@@ -204,7 +185,7 @@ namespace Lab2Cifrados.Models
             return ResultadoSBoxes;
         }
 
-        public string CifrarByte(string ByteLeido)
+        public int CifrarByte(string ByteLeido)
         {
             var Binario = IP(ByteLeido, false); //Paso1
 
@@ -232,7 +213,15 @@ namespace Lab2Cifrados.Models
 
             var Nuevo = $"{ParteF}{ParteE}"; //Paso14
             Nuevo = IP(Nuevo, true); //Paso15
-            return Nuevo;
+            char [] Arreglo = Nuevo.ToCharArray();
+            Array.Reverse(Arreglo);
+            var NuevoInt = 0;
+
+            for (int i = 0; i < Arreglo.Length; i++)
+            {
+                if (Arreglo[i] == '1') NuevoInt += (int)Math.Pow(2, i);
+            }
+            return NuevoInt;
         }
     }
 }
