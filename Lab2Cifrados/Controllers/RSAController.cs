@@ -32,7 +32,7 @@ namespace Lab2Cifrados.Controllers
                 var n = new int();
                 var phiN = new int();
                 var e = new int();
-                //var d = new int();
+                var d = new int();
 
                 if (NRSA.EsPrimo(p) && NRSA.EsPrimo(q))
                 {
@@ -50,7 +50,16 @@ namespace Lab2Cifrados.Controllers
                             Escritor.Write(e + "," + n);
                         }
                     }
-                    
+
+                    using (var writeStream = new FileStream(RutaKPrivada, FileMode.OpenOrCreate))
+                    {
+                        using (var Escritor = new StreamWriter(writeStream))
+                        {
+                            d = NRSA.CalcularD(e, phiN);
+                            Escritor.Write(d + "," + n);
+                        }
+                    }
+
                     ViewBag.Msg = "Se han generado correctamente las llaves";
                 }
                 else
