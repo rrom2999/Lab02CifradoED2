@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewBag.Title = "CargaDescifradoZZ";
+}
+<h2>Carga de archivo</h2>
+<div class="jumbotron">
+    <p class="lead">
+        @using (Html.BeginForm("CargaDescifradoZZ", "ZigZag", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+        <p>Clave:</p>
+        <input type="text" name="Clave" />
+
+        <hr />
+
+        <p>Archivo a descifrar:</p>
+
+        <input type="file" name="ADescifrarZZ" />
+        <input type="submit" value="Subir" class="btn btn-outline-success" />
+    }
+        <h6>@ViewBag.Msg</h6>
+    </div>
+

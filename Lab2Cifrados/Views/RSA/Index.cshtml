@@ -1,0 +1,32 @@
+﻿<h2>RSA</h2>
+<div class="jumbotron" style="color:darkblue">
+    <h2 class="display-3"> LLAVES</h2>
+    <p class="lead">
+        @using (Html.BeginForm("GenerarLlaves", "RSA", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <h4 class="display-3"> Ingrese dos números primos</h4>
+            <label>p:</label>
+            <input type="text" name="primoP" />
+            <label>q:</label>
+            <input type="text" name="primoQ" />
+
+            <hr />
+            <input type="submit" value="Generar" class="btn btn-outline-success" />
+        }
+        <h6>@ViewBag.Msg</h6>
+    </p>
+</div>
+<div class="jumbotron" style="color:darkblue">
+    <h2 class="display-3"> CIFRADO</h2>
+    <h4 class="display-3"> Cifre el archivo que desee</h4>
+    <p class="lead">
+        <h4><button type="button" onclick="location.href= '@Url.Action("CargaParaCifrar","RSA")'">Cifrar </button></h4>
+    </p>
+</div>
+<div class="jumbotron" style="color:darkblue">
+    <h2 class="display-3"> DESCIFRADO</h2>
+    <h4 class="display-3"> Descifre el archivo que desee</h4>
+    <p class="lead">
+        <h4><button type="button" onclick="location.href= '@Url.Action("CargaParaDescifrar","RSA")'">Descifrar </button></h4>
+    </p>
+</div>

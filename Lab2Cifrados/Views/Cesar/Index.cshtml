@@ -1,0 +1,21 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Cifrado Cesar</h2>
+<div class="jumbotron">
+    <h1>Eleccion de operacion</h1>
+
+    <table class="table table-bordered table-responsive table-hover">
+        <tr class="table-hover">
+            <td>
+                @Html.ActionLink("Cifrar por Cesar", "CargaCifradoC")
+            </td>
+            <td>
+                @Html.ActionLink("Descifrar por Cesar", "CargaDescifradoC")
+            </td>
+        </tr>
+    </table>
+</div>
+
