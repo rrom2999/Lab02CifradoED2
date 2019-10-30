@@ -13,6 +13,11 @@ namespace Lab2Cifrados.Controllers
         // GET: RSA
         public ActionResult Index()
         {
+            if (TempData["shortMessage"] != null)
+            {
+                ViewBag.Msg = TempData["shortMessage"].ToString();
+            }
+
             var ubicacionesKeys = Server.MapPath($"~/Claves");
             var directorioKeys = new DirectoryInfo(ubicacionesKeys);
             var filesKeys = directorioKeys.GetFiles("*.*");
@@ -50,7 +55,7 @@ namespace Lab2Cifrados.Controllers
                 var phiN = new int();
                 var e = new int();
                 var d = new int();
-
+                
                 if (NRSA.EsPrimo(p) && NRSA.EsPrimo(q))
                 {
                     n = p * q;
@@ -77,16 +82,16 @@ namespace Lab2Cifrados.Controllers
                         }
                     }
 
-                    ViewBag.Msg = "Se han generado correctamente las llaves";
+                    TempData["shortMessage"] = "Se han generado correctamente las llaves";
                 }
                 else
                 {
-                    ViewBag.Msg = "Alguno de los números no es primo";
+                    TempData["shortMessage"] = "Alguno de los números no es primo";
                 }
             }
             else
             {
-                ViewBag.Msg = "Falta ingresar algún número primo";
+                TempData["shortMessage"] = "Falta ingresar algún número primo";
             }
             return RedirectToAction("Index");
         }
@@ -136,75 +141,13 @@ namespace Lab2Cifrados.Controllers
         }
 
         [HttpPost]
-        public ActionResult CargaParaDescifrar(HttpPostedFileBase ADescifrar, string Clave)
+        public ActionResult CargaParaDescifrar(HttpPostedFileBase ADescifrar, HttpPostedFileBase KeyDescifrar)
         {
             if (ADescifrar != null)
             {
-                if (Clave != null)
+                if (KeyDescifrar != null)
                 {
-                    var Llave = Convert.ToInt32(Clave);
-                    if (Llave < 1024)
-                    {
-                        SDES NSDES = new SDES();
-                        NSDES.S0[0, 0] = "01"; NSDES.S0[0, 1] = "00"; NSDES.S0[0, 2] = "11"; NSDES.S0[0, 3] = "10";
-                        NSDES.S0[1, 0] = "11"; NSDES.S0[1, 1] = "10"; NSDES.S0[1, 2] = "01"; NSDES.S0[1, 3] = "00";
-                        NSDES.S0[2, 0] = "00"; NSDES.S0[2, 1] = "10"; NSDES.S0[2, 2] = "01"; NSDES.S0[2, 3] = "11";
-                        NSDES.S0[3, 0] = "11"; NSDES.S0[3, 1] = "01"; NSDES.S0[3, 2] = "11"; NSDES.S0[3, 3] = "10";
 
-                        NSDES.S1[0, 0] = "00"; NSDES.S1[0, 1] = "01"; NSDES.S1[0, 2] = "10"; NSDES.S1[0, 3] = "11";
-                        NSDES.S1[1, 0] = "10"; NSDES.S1[1, 1] = "00"; NSDES.S1[1, 2] = "01"; NSDES.S1[1, 3] = "11";
-                        NSDES.S1[2, 0] = "11"; NSDES.S1[2, 1] = "00"; NSDES.S1[2, 2] = "01"; NSDES.S1[2, 3] = "00";
-                        NSDES.S1[3, 0] = "10"; NSDES.S1[3, 1] = "01"; NSDES.S1[3, 2] = "00"; NSDES.S1[3, 3] = "11";
-
-                        Clave = Convert.ToString(Llave, 2);
-                        while (Clave.Length < 10)
-                        {
-                            Clave = $"0{Clave}";
-                        }
-
-                        var NombreArchivo = ADescifrar.FileName;
-                        var Name = NombreArchivo.Split('.');
-                        var RutaLectura = Server.MapPath($"~/Cargados/{NombreArchivo}");
-                        var RutaEscritura = Server.MapPath($"~/Descifrados/{Name[0]}.txt");
-                        var RutaContantes = Server.MapPath($"~/Constantes.txt");
-                        var Permutaciones = NSDES.ObtenerPermutaciones(RutaContantes);
-                        NSDES.ObtenerKas(Clave, Permutaciones);
-                        ADescifrar.SaveAs(RutaLectura);
-                        const int TBuffer = 1024;
-
-                        using (var stream = new FileStream(RutaLectura, FileMode.Open))
-                        {
-                            using (var Lector = new BinaryReader(stream))
-                            {
-                                using (var writeStream = new FileStream(RutaEscritura, FileMode.OpenOrCreate))
-                                {
-                                    using (var Escritor = new BinaryWriter(writeStream))
-                                    {
-                                        var BytesBuffer = new byte[TBuffer];
-                                        while (Lector.BaseStream.Position != Lector.BaseStream.Length)
-                                        {
-                                            BytesBuffer = Lector.ReadBytes(TBuffer);
-                                            foreach (var Caracter in BytesBuffer)
-                                            {
-                                                var ByteLeido = Convert.ToString(Caracter, 2); //Enviar ByteLeido a metodo para cifrar
-                                                while (ByteLeido.Length < 8)
-                                                {
-                                                    ByteLeido = $"0{ByteLeido}";
-                                                }
-                                                var ByteCifrado = NSDES.DescifrarByte(ByteLeido, Permutaciones);
-                                                Escritor.Write(Convert.ToByte(ByteCifrado));
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        ViewBag.Msg = "El archivo ha sido descifrado con exito";
-                    }
-                    else
-                    {
-                        ViewBag.Msg = "La clave debe ser menor a 1024";
-                    }
                 }
                 else
                 {

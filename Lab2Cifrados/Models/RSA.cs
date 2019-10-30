@@ -69,7 +69,7 @@ namespace Lab2Cifrados.Models
                 }
             }
 
-            return posiblesE.Min();
+            return posiblesE.Max();
         }
 
         public int CalcularD(int e, int phiN)

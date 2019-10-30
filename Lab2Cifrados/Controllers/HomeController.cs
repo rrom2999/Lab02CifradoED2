@@ -17,6 +17,7 @@ namespace Lab2Cifrados.Controllers
             var directorioD = new DirectoryInfo(ubicacionD);
             var filesC = directorioC.GetFiles("*.*");
             var filesD = directorioD.GetFiles("*.*");
+            
             var listDescarga = new List<string>();
             foreach (var item in filesC)
             {
