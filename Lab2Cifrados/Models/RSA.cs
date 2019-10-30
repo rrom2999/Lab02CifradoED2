@@ -55,6 +55,8 @@ namespace Lab2Cifrados.Models
         {
             var hastaPhiN = new List<int>();
             var posiblesE = new List<int>();
+            var e = 0;
+            var mitadDeLista = 0;
 
             for (int i = 2; i < phiN; i++)
             {
@@ -69,7 +71,9 @@ namespace Lab2Cifrados.Models
                 }
             }
 
-            return posiblesE.Max();
+            mitadDeLista = posiblesE.Count() / 2;
+            e = posiblesE.ElementAt<int>(mitadDeLista);
+            return e;
         }
 
         public int CalcularD(int e, int phiN)
@@ -105,5 +109,10 @@ namespace Lab2Cifrados.Models
             return key;
         }
 
+        public int CifrarNumero(int NCifrar, string [] Llaves)
+        {
+            int Cifrado = 0;
+            return Cifrado;
+        }
     }
 }

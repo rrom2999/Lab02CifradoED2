@@ -108,18 +108,57 @@ namespace Lab2Cifrados.Controllers
             {
                 if (KeyCifrar != null)
                 {
-                    var NRSA = new RSA();
-                    var NombreArchivo = ACifrar.FileName;
-                    var NombreLlave = KeyCifrar.FileName;
-                    var Name = NombreArchivo.Split('.');
-                    var NameKey = NombreLlave.Split('.');
-                    var RutaLectura = Server.MapPath($"~/Claves/{NombreArchivo}");
-                    var RutaEscritura = Server.MapPath($"~/Cifrados/{Name[0]}.cif");
-                    var RutaPublicK = Server.MapPath($"~/Claves/public.key");
-                    var RutaPrivateK = Server.MapPath($"~/Claves/private.key");
-                    var publicK = NRSA.ObtenerKeys(RutaPublicK);
-                    var privateK = NRSA.ObtenerKeys(RutaPrivateK);
 
+                    var NRSA = new RSA();
+                    //Lectura de llave
+                    var NombreLlave = KeyCifrar.FileName;
+                    var NameKey = NombreLlave.Split('.');
+                    var RutaLecturaLlave = Server.MapPath($"~/Cargados/{NombreLlave}");
+                    KeyCifrar.SaveAs(RutaLecturaLlave);
+                    var key = new string[2];
+                    var cadena = string.Empty;
+                    using (var stream = new FileStream(RutaLecturaLlave, FileMode.Open))
+                    {
+                        using (var Lector = new StreamReader(stream))
+                        {
+                            while (!Lector.EndOfStream)
+                            {
+                                cadena = Lector.ReadLine();
+                            }
+                        }
+                    }
+                    key = cadena.Split(',');
+                    
+                    var NombreArchivo = ACifrar.FileName;
+                    var Name = NombreArchivo.Split('.');
+                    var RutaLectura = Server.MapPath($"~/Cargados/{NombreArchivo}");
+                    var RutaEscritura = Server.MapPath($"~/Cifrados/{Name[0]}.rsacif");
+                    ACifrar.SaveAs(RutaLectura);
+
+                    const int TBuffer = 1024;
+
+                    using (var stream = new FileStream(RutaLectura, FileMode.Open))
+                    {
+                        using (var Lector = new BinaryReader(stream))
+                        {
+                            using (var writeStream = new FileStream(RutaEscritura, FileMode.OpenOrCreate))
+                            {
+                                using (var Escritor = new BinaryWriter(writeStream))
+                                {
+                                    var BytesBuffer = new byte[TBuffer];
+                                    while (Lector.BaseStream.Position != Lector.BaseStream.Length)
+                                    {
+                                        BytesBuffer = Lector.ReadBytes(TBuffer);
+                                        foreach (var Caracter in BytesBuffer)
+                                        {
+                                            var Leido = Convert.ToInt32(Caracter);
+
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
 
                     ViewBag.Msg = "El archivo ha sido cifrado con exito";
                 }

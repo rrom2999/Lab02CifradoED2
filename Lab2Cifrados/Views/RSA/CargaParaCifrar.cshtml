@@ -1,17 +1,16 @@
 ﻿<h2>CARGA DE ARCHIVO A CIFRAR</h2>
 <div class="jumbotron">
-    <h4 class="display-3"> Cifre su archivo mediante SDES</h4>
+    <h4 class="display-3"> Cifre su archivo mediante RSA</h4>
     <p class="lead">
         @using (Html.BeginForm("CargaParaCifrar", "RSA", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
         <p>Sube el archivo a cifrar:</p>
         <input type="file" name="ACifrar" />
         <hr />
-        <input type="submit" value="Subir Archivo" class="btn btn-outline-success" />
         <p>Sube la clave para cifrar:</p>
         <input type="file" name="KeyCifrar" />
         <hr />
-        <input type="submit" value="Subir Llave" class="btn btn-outline-success" />
+        <input type="submit" value="Cifrar archivo" class="btn btn-outline-success" />
     }
         <h6>@ViewBag.Msg</h6>
 
