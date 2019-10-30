@@ -226,7 +226,7 @@
     <Content Include="Views\SDES\CargaParaCifrar.cshtml" />
     <Content Include="Views\SDES\CargaParaDescifrar.cshtml" />
     <Content Include="Views\RSA\Index.cshtml" />
-    <Content Include="Views\RSA\GenerarLlaves.cshtml" />
+    <Content Include="Views\RSA\CargaParaCifrar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

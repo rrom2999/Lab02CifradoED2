@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 
@@ -75,15 +76,33 @@ namespace Lab2Cifrados.Models
         {
 
             e = e % phiN;
-            for (int i = 1; i < phiN; i++)
+            for (int d = 1; d < phiN; d++)
             {
-                if (((e * i) % phiN) == 1)
+                if (((e * d) % phiN) == 1)
                 {
-                    return i;
+                    return d;
                 }
             }
 
             return 1;
+        }
+
+        public string[] ObtenerKeys(string Ruta)
+        {
+            string[] key = new string[2];
+            var cadena = string.Empty;
+            using (var stream = new FileStream(Ruta, FileMode.Open))
+            {
+                using (var Lector = new StreamReader(stream))
+                {
+                    while (!Lector.EndOfStream)
+                    {
+                        cadena = Lector.ReadLine();
+                    }
+                }
+            }
+            key = cadena.Split(',');
+            return key;
         }
 
     }
