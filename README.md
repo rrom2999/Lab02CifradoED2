@@ -1,2 +1,3 @@
 # Lab02CifradoED2
-P10@P8@P4@EP@IP
+Public Key "e,N"
+Private Key "d,N"
