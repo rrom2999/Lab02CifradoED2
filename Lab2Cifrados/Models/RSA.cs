@@ -111,15 +111,14 @@ namespace Lab2Cifrados.Models
 
         public int CifYDescifNumero(int NCifrar, int llave, int n)
         {
-            //ulong potencia = Convert.ToUInt64(Math.Pow(NCifrar, llave));
-            //var cifrado = potencia % (ulong)n;
-            int residuo = 1;
+            /*ulong potencia = Convert.ToUInt64(Math.Pow(Convert.ToUInt64(NCifrar), Convert.ToUInt64(llave)));
+            var cifrado = Convert.ToInt32(potencia % Convert.ToUInt64(n));*/
+            int valor = 1;
             for (int i = 0; i < llave; i++)
             {
-                residuo = residuo*NCifrar % n;
+                valor = valor * NCifrar % n;
             }
-
-            return residuo;
+            return valor;
         }
         
     }

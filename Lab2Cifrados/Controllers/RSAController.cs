@@ -154,7 +154,24 @@ namespace Lab2Cifrados.Controllers
                                         foreach (var Caracter in BytesBuffer)
                                         {
                                             var Leido = Convert.ToInt32(Caracter);
-                                            
+                                            var cifrado = NRSA.CifYDescifNumero(Leido, Convert.ToInt32(key[0]), Convert.ToInt32(key[1]));
+                                            var x = 0;
+                                            if (cifrado < 256)
+                                            {
+                                                restantes = cifrado;
+                                            }
+                                            else
+                                            {
+                                                restantes = cifrado;
+                                                while (restantes >= 256)
+                                                {
+                                                    restantes -= 255;
+                                                    bytesCompletos++;
+                                                }
+                                            }
+                                            Escritor.Write(Convert.ToByte(Convert.ToInt32(bytesCompletos)));
+                                            Escritor.Write(Convert.ToByte(Convert.ToInt32(restantes)));
+                                            bytesCompletos = 0;
                                         }
                                     }
                                 }
