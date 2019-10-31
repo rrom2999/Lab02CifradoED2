@@ -205,7 +205,57 @@ namespace Lab2Cifrados.Controllers
             {
                 if (KeyDescifrar != null)
                 {
-                    
+                    var NRSA = new RSA();
+                    //Lectura de llave
+                    var NombreLlave = KeyDescifrar.FileName;
+                    var NameKey = NombreLlave.Split('.');
+                    var RutaLecturaLlave = Server.MapPath($"~/Cargados/{NombreLlave}");
+                    KeyDescifrar.SaveAs(RutaLecturaLlave);
+                    var key = new string[2];
+                    var cadena = string.Empty;
+                    using (var stream = new FileStream(RutaLecturaLlave, FileMode.Open))
+                    {
+                        using (var Lector = new BinaryReader(stream))
+                        {
+                            while (Lector.BaseStream.Position != Lector.BaseStream.Length)
+                            {
+                                cadena = Lector.ReadString();
+                            }
+                        }
+                    }
+                    key = cadena.Split(',');
+
+                    var NombreArchivo = ADescifrar.FileName;
+                    var Name = NombreArchivo.Split('.');
+                    var RutaLectura = Server.MapPath($"~/Cargados/{NombreArchivo}");
+                    var RutaEscritura = Server.MapPath($"~/Descifrados/{Name[0]}.txt");
+                    ADescifrar.SaveAs(RutaLectura);
+
+                    const int TBuffer = 1024;
+                    using (var stream = new FileStream(RutaLectura, FileMode.Open))
+                    {
+                        using (var Lector = new BinaryReader(stream))
+                        {
+                            using (var writeStream = new FileStream(RutaEscritura, FileMode.OpenOrCreate))
+                            {
+                                using (var Escritor = new BinaryWriter(writeStream))
+                                {
+                                    var BytesBuffer = new byte[TBuffer];
+                                    var numBase = 0;
+                                    while (Lector.BaseStream.Position != Lector.BaseStream.Length)
+                                    {
+                                        BytesBuffer = Lector.ReadBytes(TBuffer);
+                                        for (int i = 0; i < BytesBuffer.Length; i += 2)
+                                        {
+                                            numBase = Convert.ToInt32(BytesBuffer[i]) * 255 + Convert.ToInt32(BytesBuffer[i + 1]);
+                                            var cifrado = NRSA.CifYDescifNumero(numBase, Convert.ToInt32(key[0]), Convert.ToInt32(key[1]));
+                                            Escritor.Write(Convert.ToByte(cifrado));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                     return View();
                 }
                 else
