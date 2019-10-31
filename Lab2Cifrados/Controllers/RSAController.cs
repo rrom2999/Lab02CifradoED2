@@ -66,7 +66,7 @@ namespace Lab2Cifrados.Controllers
 
                     using (var writeStream = new FileStream(RutaKPublica, FileMode.OpenOrCreate))
                     {
-                        using (var Escritor = new StreamWriter(writeStream))
+                        using (var Escritor = new BinaryWriter(writeStream))
                         {
                             e = NRSA.CalcularE(n, phiN);
                             Escritor.Write($"{e},{n}");
@@ -75,7 +75,7 @@ namespace Lab2Cifrados.Controllers
 
                     using (var writeStream = new FileStream(RutaKPrivada, FileMode.OpenOrCreate))
                     {
-                        using (var Escritor = new StreamWriter(writeStream))
+                        using (var Escritor = new BinaryWriter(writeStream))
                         {
                             d = NRSA.CalcularD(e, phiN);
                             Escritor.Write($"{d},{n}");
@@ -119,11 +119,11 @@ namespace Lab2Cifrados.Controllers
                     var cadena = string.Empty;
                     using (var stream = new FileStream(RutaLecturaLlave, FileMode.Open))
                     {
-                        using (var Lector = new StreamReader(stream))
+                        using (var Lector = new BinaryReader(stream))
                         {
-                            while (!Lector.EndOfStream)
+                            while (Lector.BaseStream.Position != Lector.BaseStream.Length)
                             {
-                                cadena = Lector.ReadLine();
+                                cadena = Lector.ReadString();
                             }
                         }
                     }
@@ -146,13 +146,15 @@ namespace Lab2Cifrados.Controllers
                                 using (var Escritor = new BinaryWriter(writeStream))
                                 {
                                     var BytesBuffer = new byte[TBuffer];
+                                    var bytesCompletos = 0;
+                                    var restantes = 0;
                                     while (Lector.BaseStream.Position != Lector.BaseStream.Length)
                                     {
                                         BytesBuffer = Lector.ReadBytes(TBuffer);
                                         foreach (var Caracter in BytesBuffer)
                                         {
                                             var Leido = Convert.ToInt32(Caracter);
-
+                                            
                                         }
                                     }
                                 }
@@ -186,7 +188,8 @@ namespace Lab2Cifrados.Controllers
             {
                 if (KeyDescifrar != null)
                 {
-
+                    
+                    return View();
                 }
                 else
                 {

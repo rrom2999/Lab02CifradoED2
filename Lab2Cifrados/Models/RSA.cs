@@ -109,10 +109,18 @@ namespace Lab2Cifrados.Models
             return key;
         }
 
-        public int CifrarNumero(int NCifrar, string [] Llaves)
+        public int CifYDescifNumero(int NCifrar, int llave, int n)
         {
-            int Cifrado = 0;
-            return Cifrado;
+            //ulong potencia = Convert.ToUInt64(Math.Pow(NCifrar, llave));
+            //var cifrado = potencia % (ulong)n;
+            int residuo = 1;
+            for (int i = 0; i < llave; i++)
+            {
+                residuo = residuo*NCifrar % n;
+            }
+
+            return residuo;
         }
+        
     }
 }

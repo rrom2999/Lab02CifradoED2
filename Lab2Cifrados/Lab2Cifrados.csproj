@@ -227,6 +227,7 @@
     <Content Include="Views\SDES\CargaParaDescifrar.cshtml" />
     <Content Include="Views\RSA\Index.cshtml" />
     <Content Include="Views\RSA\CargaParaCifrar.cshtml" />
+    <Content Include="Views\RSA\CargaParaDescifrar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

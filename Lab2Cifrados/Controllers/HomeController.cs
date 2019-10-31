@@ -35,7 +35,7 @@ namespace Lab2Cifrados.Controllers
         {
             var name = fileName.Split('.');
             var DireccionCompleta = string.Empty;
-            if (name[1] == "cif")
+            if (name[1] == "cif" || name[1] == "rsacif")
             {
                 DireccionCompleta = Path.Combine(Server.MapPath($"~//Cifrados"), fileName);
                 return File(DireccionCompleta, "Cifrados", $"{name[0]}.{name[1]}");
