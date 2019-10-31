@@ -48,45 +48,52 @@ namespace Lab2Cifrados.Controllers
         {
             if ((primoP != null) && (primoQ != null))
             {
-                var NRSA = new RSA();
-                var p = Convert.ToInt32(primoP);
-                var q = Convert.ToInt32(primoQ);
-                var n = new int();
-                var phiN = new int();
-                var e = new int();
-                var d = new int();
-                
-                if (NRSA.EsPrimo(p) && NRSA.EsPrimo(q))
+                if((Convert.ToInt32(primoP) >= 17 && Convert.ToInt32(primoQ) >= 19) || (Convert.ToInt32(primoP) >= 19 && Convert.ToInt32(primoQ) >= 17))
                 {
-                    n = p * q;
-                    phiN = (p - 1) * (q - 1);
+                    var NRSA = new RSA();
+                    var p = Convert.ToInt32(primoP);
+                    var q = Convert.ToInt32(primoQ);
+                    var n = new int();
+                    var phiN = new int();
+                    var e = new int();
+                    var d = new int();
 
-                    var RutaKPrivada = Server.MapPath($"~/Claves/private.key");
-                    var RutaKPublica = Server.MapPath($"~/Claves/public.key");
-
-                    using (var writeStream = new FileStream(RutaKPublica, FileMode.OpenOrCreate))
+                    if (NRSA.EsPrimo(p) && NRSA.EsPrimo(q))
                     {
-                        using (var Escritor = new BinaryWriter(writeStream))
-                        {
-                            e = NRSA.CalcularE(n, phiN);
-                            Escritor.Write($"{e},{n}");
-                        }
-                    }
+                        n = p * q;
+                        phiN = (p - 1) * (q - 1);
 
-                    using (var writeStream = new FileStream(RutaKPrivada, FileMode.OpenOrCreate))
+                        var RutaKPrivada = Server.MapPath($"~/Claves/private.key");
+                        var RutaKPublica = Server.MapPath($"~/Claves/public.key");
+
+                        using (var writeStream = new FileStream(RutaKPublica, FileMode.OpenOrCreate))
+                        {
+                            using (var Escritor = new BinaryWriter(writeStream))
+                            {
+                                e = NRSA.CalcularE(n, phiN);
+                                Escritor.Write($"{e},{n}");
+                            }
+                        }
+
+                        using (var writeStream = new FileStream(RutaKPrivada, FileMode.OpenOrCreate))
+                        {
+                            using (var Escritor = new BinaryWriter(writeStream))
+                            {
+                                d = NRSA.CalcularD(e, phiN);
+                                Escritor.Write($"{d},{n}");
+                            }
+                        }
+
+                        TempData["shortMessage"] = "Se han generado correctamente las llaves";
+                    }
+                    else
                     {
-                        using (var Escritor = new BinaryWriter(writeStream))
-                        {
-                            d = NRSA.CalcularD(e, phiN);
-                            Escritor.Write($"{d},{n}");
-                        }
+                        TempData["shortMessage"] = "Alguno de los números no es primo";
                     }
-
-                    TempData["shortMessage"] = "Se han generado correctamente las llaves";
                 }
                 else
                 {
-                    TempData["shortMessage"] = "Alguno de los números no es primo";
+                    TempData["shortMessage"] = "p y q deben ser al menos 17 y 19";
                 }
             }
             else
